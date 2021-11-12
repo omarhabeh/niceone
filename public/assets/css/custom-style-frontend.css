@@ -1,0 +1,52 @@
+
+
+.aiz-main-wrapper {
+
+
+}
+
+
+.categories_sidebar {
+	z-index:3000 !important;
+}
+
+.half-outside-arrow .slick-next {
+	z-index:2000 !important;
+}
+
+/******************** custom style for floating icon for chat ********************/
+
+@media (max-width: 767px) {
+
+.floating-wpp {
+
+position: fixed !important;
+bottom: 65px !important;
+
+}
+
+}
+
+@media (min-width: 768px) {
+
+.floating-wpp {
+
+position: fixed !important;
+bottom: 25px !important;
+
+}
+
+}
+
+
+/******************** custom style for floating icon for chat ********************/
+
+@media only screen and (min-width: 320px) and (max-width: 570px)  {
+    .dropdown-toggle {
+        font-size: 11px !important;
+    }
+    .list-inline-item:not(:last-child) {
+
+        font-size: 11px;
+    }
+}

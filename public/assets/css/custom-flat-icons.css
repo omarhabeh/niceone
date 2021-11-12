@@ -1,0 +1,49 @@
+/*
+
+this is my own  custom-flat-whataspp
+and call button 
+
+*/
+
+/* whatsapp flat icon */
+
+.floating-wpp .floating-wpp-popup .floating-wpp-message
+	{
+		text-align: right !important;
+	}
+
+.close {
+	color: #E31904 !important;
+	font-weight: bold !important;
+	opacity: 1 !important;
+}
+
+/* float icon for call */
+.call-float {
+	position:fixed !important;
+	width:50px;
+	height:50px;
+	bottom:2% !important;
+	left:1% !important;
+	background-color:#09A6D4;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+	transition: width 2s, height 4s;
+
+}
+
+.call-float:hover {
+	background-color:#47C205 !important;
+	cursor:pointer !important;
+	box-shadow: 3px 3px 3px  #999;
+}
+
+.my-float{
+	margin-top:12px;
+	margin-bottom:12px;
+	text-align:center !important;
+	font-size:25px !important;
+	color:#fff !important;
+}
