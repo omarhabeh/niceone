@@ -28,7 +28,7 @@ use Mail;
 use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
-
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -37,7 +37,8 @@ class HomeController extends Controller
         if(Auth::check()){
             return redirect()->route('home');
         }
-        return view('frontend.user_login');
+        return Redirect::to('/#loginModal');
+        // return view('home');
     }
 
     public function registration(Request $request)
@@ -65,7 +66,8 @@ class HomeController extends Controller
 
             }
         }
-        return view('frontend.user_registration');
+        return Redirect::to('/#registerModal');
+        // return view('frontend.user_registration');
     }
 
     public function cart_login(Request $request)
@@ -85,6 +87,62 @@ class HomeController extends Controller
             }
         }
         return back();
+    }
+
+    public function smslogin(Request $request){
+        $otp = rand(100000, 999999);
+        $request->validate([
+            'phone' => ['required',`regex:#(\+\d+|0)(\d{10})$#`,'min:10'],
+        ]);
+        if(!$user = User::where('phone',$request->phone)){
+            $user = new User;
+            $user->phone = $request->phone;
+            $user->verification_code = $otp;
+            $user->save();
+        }
+        else{
+            \DB::table('users')
+            ->where('phone',$request->phone)  // find your user by their email
+            ->limit(1)  // optional - to ensure only one record is updated.
+            ->update(array('verification_code' => $otp)); 
+        }
+        Session::put('user_phone',$request->phone);
+        $api_key  = 'd5e5b66e493d0da8c91869247d9b6ec3';
+        $title    = 'Niceone';
+        $text	  = 'You OTP password is '.$otp;
+        $sentto	  = $request->phone;
+
+        $body = array("api_key" => $api_key, "title"=>$title, "text"=>$text,"sentto"=>$sentto);
+        $result = $this->sendRequest('https://www.turkeysms.com.tr/api/v3/gonder/add-content', $body);
+        return response()->json($request);
+    }
+    public function smsotp(Request $request){
+        $request->validate([
+            'otp' => 'required',
+        ]);
+        $phone = Session::get('user_phone');
+        $otp_from_db = User::where('phone',$phone)->pluck('verification_code')->first();
+        if($otp_from_db === $request->otp){
+            $user = User::where('phone',$phone)->first();
+            if(Auth::loginUsingId($user->id)){
+                return response()->json(['message'=>'Login succeed']);
+            }
+        }
+        return response()->json(['error'=>'OTP password doesn\'t match']);
+
+    }
+    public function sendRequest($site, $data)
+    {
+        $json = json_encode($data);
+        $ch = curl_init($site);
+        $header = array('Content-Type: application/json');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
     }
 
     /**
@@ -586,7 +644,7 @@ class HomeController extends Controller
         }
 
 
-        $products = filter_products($products)->paginate(12)->appends(request()->query());
+        $products = filter_products($products)->paginate(50)->appends(request()->query());
 
         return view('frontend.product_listing', compact('products', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id','min_price', 'max_price', 'attributes', 'selected_attributes', 'all_colors', 'selected_color'));
     }

@@ -37,7 +37,6 @@ class CheckoutController extends Controller
     //check the selected payment gateway and redirect to that controller accordingly
     public function checkout(Request $request)
     {
-//        dd($request);
         if ($request->payment_option != null) {
 
             if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
@@ -289,9 +288,7 @@ class CheckoutController extends Controller
             $cartItem->address_id = $request->address_id;
             $cartItem->save();
         }
-
         return view('frontend.delivery_info', compact('carts'));
-        // return view('frontend.payment_select', compact('total'));
     }
 
     public function store_delivery_info(Request $request)
@@ -310,13 +307,12 @@ class CheckoutController extends Controller
                 $product = \App\Product::find($cartItem['product_id']);
                 $tax += $cartItem['tax'] * $cartItem['quantity'];
                 $subtotal += $cartItem['price'] * $cartItem['quantity'];
-
-                if ($request['shipping_type_' . $request->owner_id] == 'pickup_point') {
-                    $cartItem['shipping_type'] = 'pickup_point';
-                    $cartItem['pickup_point'] = $request['pickup_point_id_' . $request->owner_id];
-                } else {
-                    $cartItem['shipping_type'] = 'home_delivery';
-                }
+                // if ($request['shipping_type_' . $request->owner_id] == 'pickup_point') {
+                //     $cartItem['shipping_type'] = 'pickup_point';
+                //     $cartItem['pickup_point'] = $request['pickup_point_id_' . $request->owner_id];
+                // } else {
+                $cartItem['shipping_type'] = 'home_delivery';
+                // }
                 $cartItem['shipping_cost'] = 0;
                 if ($cartItem['shipping_type'] == 'home_delivery') {
                     $cartItem['shipping_cost'] = getShippingCost($carts, $key);
@@ -357,56 +353,6 @@ class CheckoutController extends Controller
             return redirect()->route('home');
         }
     }
-
-//    public function get_payment_info(Request $request)
-//    {
-//        $carts = Cart::where('user_id', Auth::user()->id)
-//                ->where('owner_id', $request->owner_id)
-//                ->get();
-//        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
-//        $total = 0;
-//        $tax = 0;
-//        $shipping = 0;
-//        $subtotal = 0;
-//
-//        if ($carts && count($carts) > 0) {
-//            foreach ($carts as $key => $cartItem) {
-//                $tax += $cartItem['tax'] * $cartItem['quantity'];
-//                $subtotal += $cartItem['price'] * $cartItem['quantity'];
-//
-//                if ($request['shipping_type_' . $request->owner_id] == 'pickup_point') {
-//                    $cartItem['shipping_type'] = 'pickup_point';
-//                    $cartItem['pickup_point'] = $request['pickup_point_id_' . $request->owner_id];
-//                } else {
-//                    $cartItem['shipping_type'] = 'home_delivery';
-//                }
-//                $cartItem['shipping_cost'] = 0;
-//                if ($cartItem['shipping_type'] == 'home_delivery') {
-//                    $cartItem['shipping_cost'] = getShippingCost($carts, $key);
-//                }
-//
-//                if (isset($cartItem['shipping_cost']) && is_array(json_decode($cartItem['shipping_cost'], true))) {
-//                    foreach (json_decode($cartItem['shipping_cost'], true) as $shipping_region => $val) {
-//                        if ($shipping_info['city'] == $shipping_region) {
-//                            $cartItem['shipping_cost'] = (double) ($val);
-//                            break;
-//                        }
-//                    }
-//                } else {
-//                    if (!$cartItem['shipping_cost'] ||
-//                            $cartItem['shipping_cost'] == null ||
-//                            $cartItem['shipping_cost'] == 'null') {
-//
-//                        $cartItem['shipping_cost'] = 0;
-//                    }
-//                }
-//                $shipping += $cartItem['shipping_cost'];
-//                $cartItem->save();
-//            }
-//            $total = $subtotal + $tax + $shipping;
-//            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total'));
-//        }
-//    }
 
     public function apply_coupon_code(Request $request)
     {

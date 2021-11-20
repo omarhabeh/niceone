@@ -84,10 +84,10 @@
                         </li>
                     @else
                         <li class="list-inline-item mr-3">
-                            <a href="{{ route('user.login') }}" class="text-reset py-2 d-inline-block opacity-60">{{ translate('Login')}}</a>
+                            <a href="#" class="text-reset py-2 d-inline-block opacity-60" data-toggle="modal" data-target="#loginModal">{{ translate('Login')}}</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ route('user.registration') }}" class="text-reset py-2 d-inline-block opacity-60">{{ translate('Registration')}}</a>
+                            <a href="#" class="text-reset py-2 d-inline-block opacity-60" data-toggle="modal" data-target="#registerModal">{{ translate('Registration')}}</a>
                         </li>
                     @endauth
                 </ul>
@@ -233,3 +233,33 @@
         </div>
     @endif
 </header>
+
+{{-- Login Modal --}}
+<div class="modal fade usermodal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      @include('frontend.user_login')
+    </div>
+  </div>
+</div>
+{{-- End Login Modal --}}
+
+{{-- Register Modal --}}
+<div class="modal fade usermodal" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      @include('frontend.user_registration')
+    </div>
+  </div>
+</div>
+{{-- End Register Modal --}}

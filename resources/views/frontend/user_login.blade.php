@@ -1,21 +1,59 @@
-@extends('frontend.layouts.app')
-
-@section('content')
     <section class="gry-bg py-5">
         <div class="profile">
             <div class="container">
-                <div class="row">
-                    <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
-                        <div class="card">
+                <div class="row toprow">
+                    <div class="col">
+                        <i class="la la-user"></i>
+                        <p >{{translate('login') }}</p>
+                        <p class="text-muted text-center">{{ Lang::locale() == 'sa' ? translate('اختر الوسيلة المناسبة') : translate('choose login method')}}</p>
+                    </div>
+                </div>
+                <div class="row bottomrow">
+                    <div class="col">
+                        {{-- Update --}}
+                        <div class="row methods">
+                            <div class="col" onclick="showEmail()">
+                                <div class="card">
+                                    <i class="la la-envelope"></i>
+                                    <p>{{translate('Email')}}</p>
+                                </div>
+                            </div>
+                            <div class="col" onclick="showPhone()">
+                                <div class="card">
+                                    <i class="la la-phone"></i>
+                                    <p>{{translate('Phone')}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- End Update --}}
+                        <div class="phone-card">
+                            <form class="form-default" role="form" action="{{ route('smslogin') }}" method="POST" id="smsform">
+                                @csrf
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="+96655555555" name="phone" required style="direction: ltr;">
+                                    <button class="btn btn-dark phonenumber" type="submit">{{Lang::locale() == 'sa' ? "ارسال " : translate('Send')}}</button>                               
+                                </div>
+                                <small class="text-danger" id="error"></small>
+                            </form>
+                            <form class="form-default" role="form" action="{{ route('smsotp') }}" method="POST" id="otpForm">
+                                @csrf
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="ارسل رمز التحقق" name="otp" id="otp" >
+                                    <button class="btn btn-dark" type="submit">{{Lang::locale() == 'sa' ? "ارسل رمز التحقق " : translate('Send')}}</button>                               
+                                </div>
+                                <small class="text-danger" id="error"></small>
+                            </form>
+                            
+                        </div>
+                        <div class="card main-card">
                             <div class="text-center pt-4">
                                 <h1 class="h4 fw-600">
                                     {{ translate('Login to your account.')}}
                                 </h1>
                             </div>
-
                             <div class="px-4 py-3 py-lg-4">
                                 <div class="">
-                                    <form class="form-default" role="form" action="{{ route('login') }}" method="POST">
+                                    <form class="form-default" role="form" action="{{ route('login') }}" method="POST" id="LoginForm">
                                         @csrf
                                         <div class="form-group">
                                             @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
@@ -49,7 +87,6 @@
                                             <button type="submit" class="btn btn-primary btn-block fw-600">{{  translate('Login') }}</button>
                                         </div>
                                     </form>
-
                                     @if (env("DEMO_MODE") == "On")
                                         <div class="mb-5">
                                             <table class="table table-bordered mb-0">
@@ -117,9 +154,51 @@
             </div>
         </div>
     </section>
-@endsection
-
-@section('script')
+@section('scriptPopup')
+    <script>
+     $('#otpForm').hide();
+    $("#smsform").submit(function(e) {
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+    var form = $(this);
+    var url = form.attr('action');
+    $('.phonenumber').prop( "disabled", true );
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+              $('#error').text('');
+              $('.phonenumber').hide();
+              $('#otpForm').show();
+           },
+           error:function(data){
+                   $('#error').text('Phone number not valid');
+           }
+         });
+    });
+    $("#otpForm").submit(function(e) {
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+    var form = $(this);
+    var url = form.attr('action');
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+            $('#error').text('');
+            if(data['error']){
+                $('#error').text(data['error']);
+            }
+            window.location.href = '/';
+           },
+           error:function(data){
+                   $('#error').text('Phone number not valid');
+           }
+         });
+    });
+    </script>
     <script type="text/javascript">
         function autoFillSeller(){
             $('#email').val('seller@example.com');
@@ -132,6 +211,19 @@
         function autoFillDeliveryBoy(){
             $('#email').val('deliveryboy@example.com');
             $('#password').val('123456');
+        }
+        // default state
+        $('.phone-card').hide();
+        $('.main-card').hide();
+        
+        //functions to show the email/phone
+        function showEmail(){
+            $('.main-card').show();
+            $('.phone-card').hide();
+        }
+        function showPhone(){
+            $('.main-card').hide();
+            $('.phone-card').show();
         }
     </script>
 @endsection

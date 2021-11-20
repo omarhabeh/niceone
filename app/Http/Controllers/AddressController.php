@@ -43,11 +43,19 @@ class AddressController extends Controller
         else{
             $address->user_id = Auth::user()->id;
         }
-        $address->address = $request->address;
+
+        // $address->address = $request->address;
         $address->country = $request->country;
         $address->city = $request->city;
-        $address->postal_code = $request->postal_code;
+        // $address->postal_code = $request->postal_code;
         $address->phone = $request->phone;
+        /* Update */
+        $address->Full_name = $request->name;
+        $address->neighbourhood_name = $request->Neighborhood_name;
+        $address->street_name = $request->street_name;
+        $address->apt_no = $request->apt_no;
+        /* End Update */
+
         $address->save();
 
         return back();
@@ -86,12 +94,18 @@ class AddressController extends Controller
     public function update(Request $request, $id)
     {
         $address = Address::findOrFail($id);
-        
-        $address->address = $request->address;
+
+        // $address->address = $request->address;
         $address->country = $request->country;
         $address->city = $request->city;
-        $address->postal_code = $request->postal_code;
+        // $address->postal_code = $request->postal_code;
         $address->phone = $request->phone;
+         /* Update */
+         $address->Full_name = $request->name;
+         $address->neighbourhood_name = $request->Neighborhood_name;
+         $address->street_name = $request->street_name;
+         $address->apt_no = $request->apt_no;
+         /* End Update */
         $address->save();
 
         flash(translate('Address info updated successfully'))->warning();

@@ -19,22 +19,22 @@
                             <h3 class="fs-14 fw-600 d-none d-lg-block ">{{ translate('2. Shipping info')}}</h3>
                         </div>
                     </div>
-                    <div class="col">
+                    {{-- <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 ">{{ translate('3. Delivery info')}}</h3>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 ">{{ translate('4. Payment')}}</h3>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 ">{{ Lang::locale() == 'sa' ? translate('3. الدفع') : translate('3. Payment')}}</h3>
                         </div>
                     </div>
                     <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-check-circle"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 ">{{ translate('5. Confirmation')}}</h3>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 ">{{ Lang::locale() == 'sa' ? translate('4. التأكيد') : translate('4. Confirmation')}}</h3>
                         </div>
                     </div>
                 </div>
@@ -61,14 +61,34 @@
                                             <span class="d-flex p-3 aiz-megabox-elem">
                                                 <span class="aiz-rounded-check flex-shrink-0 mt-1"></span>
                                                 <span class="flex-grow-1 pl-3 text-left">
-                                                    <div>
+                                                    {{-- <div>
                                                         <span class="opacity-60">{{ translate('Address') }}:</span>
                                                         <span class="fw-600 ml-2">{{ $address->address }}</span>
-                                                    </div>
-                                                    <div>
+                                                    </div> --}}
+                                                    {{-- <div>
                                                         <span class="opacity-60">{{ translate('Postal Code') }}:</span>
                                                         <span class="fw-600 ml-2">{{ $address->postal_code }}</span>
+                                                    </div> --}}
+                                                    {{-- Update --}}
+                                                    <div>
+                                                        <span class="opacity-60">{{ translate('Full Name') }}:</span>
+                                                        <span class="fw-600 ml-2">{{ $address->Full_name }}</span>
                                                     </div>
+                                                    @if ($address->apt_no)
+                                                    <div>
+                                                        <span class="opacity-60">{{ Lang::locale() == 'sa' ? translate('رقم الشقة') : translate('Apt No.')}}:</span>
+                                                        <span class="fw-600 ml-2">{{ $address->apt_no }}</span>
+                                                    </div>
+                                                    @endif
+                                                    <div>
+                                                        <span class="opacity-60">{{ Lang::locale() == 'sa' ? translate('اسم الشارع') : translate('Street name')}}:</span>
+                                                        <span class="fw-600 ml-2">{{ $address->street_name }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="opacity-60">{{ Lang::locale() == 'sa' ? translate('اسم الحي') : translate('Neighborhood name')}}:</span>
+                                                        <span class="fw-600 ml-2">{{ $address->neighbourhood_name }}</span>
+                                                    </div>
+                                                    {{-- End Update --}}
                                                     <div>
                                                         <span class="opacity-60">{{ translate('City') }}:</span>
                                                         <span class="fw-600 ml-2">{{ $address->city }}</span>
@@ -196,14 +216,24 @@
                 @csrf
                 <div class="modal-body">
                     <div class="p-3">
+                        {{-- Update --}}
                         <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Full name')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Full Name') }}" name="name" required value="{{Auth::user()->name}}">
+                            </div>
+                        </div>
+                        {{-- End Update --}}
+                        {{-- <div class="row">
                             <div class="col-md-2">
                                 <label>{{ translate('Address')}}</label>
                             </div>
                             <div class="col-md-10">
                                 <textarea class="form-control textarea-autogrow mb-3" placeholder="{{ translate('Your Address')}}" rows="1" name="address" required></textarea>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
                             <div class="col-md-2">
                                 <label>{{ translate('Country')}}</label>
@@ -229,12 +259,36 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-2">
                                 <label>{{ translate('Postal code')}}</label>
                             </div>
                             <div class="col-md-10">
                                 <input type="text" class="form-control mb-3" placeholder="{{ translate('Your Postal Code')}}" name="postal_code" value="" required>
+                            </div>
+                        </div> --}}
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ Lang::locale() == 'sa' ? translate('اسم الحي') : translate('Neighborhood name')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" placeholder="{{ Lang::locale() == 'sa' ? translate('اسم الحي') : translate('Your Neighborhood name')}}" name="Neighborhood_name" value="" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ Lang::locale() == 'sa' ? translate('اسم الشارع') : translate('Street name')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" placeholder="{{ Lang::locale() == 'sa' ? translate('اسم الشارع') : translate('Street name')}}" name="street_name" value="" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ Lang::locale() == 'sa' ? translate('رقم الشقة (اختياري)') : translate('Apt No. (optional)')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" placeholder="{{ Lang::locale() == 'sa' ? translate('رقم الشقة (اختياري)') : translate('Apt No. (optional)')}}" name="apt_no" value="">
                             </div>
                         </div>
                         <div class="row">
@@ -275,6 +329,10 @@
 
 @section('script')
 <script type="text/javascript">
+   /* Update */
+   $('.aiz-selectpicker option[value="Saudi Arabia"]').attr("selected",true);//default value
+   get_city("Saudi Arabia");//default value city
+   /* End Update */
     function edit_address(address) {
         var url = '{{ route("addresses.edit", ":id") }}';
         url = url.replace(':id', address);
@@ -312,10 +370,8 @@
             },
             success: function (response) {
                 var obj = JSON.parse(response);
-                if(obj != '') {
-                    $('[name="city"]').html(obj);
-                    AIZ.plugins.bootstrapSelect('refresh');
-                }
+                $('[name="city"]').html(obj);
+                AIZ.plugins.bootstrapSelect('refresh');
             }
         });
     }

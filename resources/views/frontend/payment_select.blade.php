@@ -22,22 +22,22 @@
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('2. Shipping info')}}</h3>
                         </div>
                     </div>
-                    <div class="col done">
+                    {{-- <div class="col done">
                         <div class="text-center text-success">
                             <i class="la-3x mb-2 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('3. Delivery info')}}</h3>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col active">
                         <div class="text-center text-primary">
                             <i class="la-3x mb-2 las la-credit-card"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('4. Payment')}}</h3>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block">{{ Lang::locale() == 'sa' ? translate('3. الدفع') : translate('3. Payment')}}</h3>
                         </div>
                     </div>
                     <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-check-circle"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">{{ translate('5. Confirmation')}}</h3>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">{{ Lang::locale() == 'sa' ? translate('4. التأكيد') : translate('4. Confirmation')}}</h3>
                         </div>
                     </div>
                 </div>
@@ -406,7 +406,6 @@
                         <a href="{{ route('returnpolicy') }}">{{ translate('return policy')}}</a> &
                         <a href="{{ route('privacypolicy') }}">{{ translate('privacy policy')}}</a>
                     </div>
-
                     <div class="row align-items-center pt-3">
                         <div class="col-6">
                             <a href="{{ route('home') }}" class="link link--style-3">

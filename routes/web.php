@@ -49,6 +49,8 @@ Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');
 Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.change');
 
+Route::post('smslogin/', 'HomeController@smslogin' )->name('smslogin');
+Route::post('smsotp/', 'HomeController@smsotp' )->name('smsotp');
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 Route::get('/users/login', 'HomeController@login')->name('user.login');
@@ -95,7 +97,9 @@ Route::post('/product/variant_price', 'HomeController@variant_price')->name('pro
 Route::get('/shop/{slug}', 'HomeController@shop')->name('shop.visit');
 Route::get('/shop/{slug}/{type}', 'HomeController@filter_shop')->name('shop.visit.type');
 
+Route::group(['middleware' => ['user']], function() {
 Route::get('/cart', 'CartController@index')->name('cart');
+});
 Route::post('/cart/nav-cart-items', 'CartController@updateNavCart')->name('cart.nav_cart');
 Route::post('/cart/show-cart-modal', 'CartController@showCartModal')->name('cart.showCartModal');
 Route::post('/cart/addtocart', 'CartController@addToCart')->name('cart.addToCart');
@@ -106,7 +110,7 @@ Route::post('/cart/updateQuantity', 'CartController@updateQuantity')->name('cart
 Route::group(['middleware' => ['checkout']], function() {
     Route::get('/checkout', 'CheckoutController@get_shipping_info')->name('checkout.shipping_info');
     Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
-    Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
+    Route::post('/checkout/payment_select', 'CheckoutController@checkout')->name('checkout.store_delivery_info');
 });
 
 Route::get('/checkout/order-confirmed', 'CheckoutController@order_confirmed')->name('order_confirmed');
@@ -156,7 +160,7 @@ Route::get('/supportpolicy', 'HomeController@supportpolicy')->name('supportpolic
 Route::get('/terms', 'HomeController@terms')->name('terms');
 Route::get('/privacypolicy', 'HomeController@privacypolicy')->name('privacypolicy');
 
-Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
+Route::group(['middleware' => ['user', 'unbanned']], function() {
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
     Route::get('/profile', 'HomeController@profile')->name('profile');
     Route::post('/new-user-verification', 'HomeController@new_verify')->name('user.new.verify');

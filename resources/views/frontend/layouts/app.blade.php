@@ -63,7 +63,7 @@
 	<link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
 	<link rel="stylesheet" href="{{ static_asset('assets/css/custom-style-frontend.css') }}">
 	@endif
-
+	<link rel="stylesheet" href="{{ static_asset('assets/css/custom_style.css') }}">
     <script>
         var AIZ = AIZ || {};
         AIZ.local = {
@@ -650,8 +650,21 @@
          }
 
     </script>
-
+    
+    {{-- open modal from url --}}
+        <script>
+        $(document).ready(function() {
+            if(window.location.href.indexOf('#registerModal') != -1) {
+                $('#registerModal').modal('show');
+            }
+            if(window.location.href.indexOf('#loginModal') != -1) {
+                $('#loginModal').modal('show');
+            }
+        });
+        </script>
+    {{-- END open modal from url --}}
     @yield('script')
+    @yield('scriptPopup')
 
     @php
         echo get_setting('footer_script');

@@ -50,7 +50,7 @@
 
                         </div>
 
-                        <div class="col done">
+                        {{-- <div class="col done">
 
                             <div class="text-center text-success">
 
@@ -60,7 +60,7 @@
 
                             </div>
 
-                        </div>
+                        </div> --}}
 
                         <div class="col active">
 
@@ -68,7 +68,7 @@
 
                                 <i class="la-3x mb-2 las la-credit-card"></i>
 
-                                <h3 class="fs-14 fw-600 d-none d-lg-block text-capitalize">{{ translate('4. Payment')}}</h3>
+                                <h3 class="fs-14 fw-600 d-none d-lg-block text-capitalize">{{ Lang::locale() == 'sa' ? translate('3. الدفع') : translate('3. Payment')}}</h3>
 
                             </div>
 
@@ -80,7 +80,7 @@
 
                                 <i class="la-3x mb-2 opacity-50 las la-check-circle"></i>
 
-                                <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 text-capitalize">{{ translate('5. Confirmation')}}</h3>
+                                <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 text-capitalize">{{ Lang::locale() == 'sa' ? translate('4. التأكيد') : translate('4. Confirmation')}}</h3>
 
                             </div>
 
@@ -145,7 +145,7 @@
             // applepay: {
             //     country: 'SA',
             //     label: 'Awesome Cookie Store',
-            //     validate_merchant_url: 'https://mystore.com/checkout/applepay/validate-merchant',
+            //     validate_merchant_url: 'https://niceone.com.sa/checkout/applepay/validate-merchant',
             // },
             supported_networks: [
                 'mada',

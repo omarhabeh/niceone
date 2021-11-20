@@ -19,22 +19,22 @@
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('2. Shipping info')}}</h3>
                         </div>
                     </div>
-                    <div class="col active">
+                    {{-- <div class="col active">
                         <div class="text-center text-primary">
                             <i class="la-3x mb-2 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('3. Delivery info')}}</h3>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">{{ translate('4. Payment')}}</h3>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">{{ Lang::locale() == 'sa' ? translate('3. الدفع') : translate('3. Payment')}}</h3>
                         </div>
                     </div>
                     <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-check-circle"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">{{ translate('5. Confirmation')}}</h3>
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">{{ Lang::locale() == 'sa' ? translate('4. التأكيد') : translate('4. Confirmation')}}</h3>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                                 </li>
                                 @endforeach
                             </ul>
-                            
+
                             <div class="row border-top pt-3">
                                 <div class="col-md-6">
                                     <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}</h6>
@@ -155,12 +155,16 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="card-footer justify-content-end">
                             <button type="submit" name="owner_id" value="{{ App\User::where('user_type', 'admin')->first()->id }}" class="btn fw-600 btn-primary">{{ translate('Continue to Payment')}}</a>
                         </div>
                     </div>
+                    {{-- Update --}}
+                    <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
+                    <input type="hidden" name="payment_option" value="Moyasar_Payment">
+                     {{-- End Update --}}
                 </form>
                 @endif
                 <form class="form-default"  action="{{ route('checkout.store_delivery_info') }}" role="form" method="POST">
@@ -191,7 +195,7 @@
                                         </li>
                                         @endforeach
                                     </ul>
-                                    
+
                                     <div class="row border-top pt-3">
                                         <div class="col-md-6">
                                             <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}</h6>
@@ -262,7 +266,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="card-footer justify-content-end">
                                     <button type="submit" name="owner_id" value="{{ $key }}" class="btn fw-600 btn-primary">{{ translate('Continue to Payment')}}</a>

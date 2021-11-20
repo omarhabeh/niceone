@@ -3,10 +3,10 @@
     <div class="p-3">
         <div class="row">
             <div class="col-md-2">
-                <label>{{ translate('Address')}}</label>
+                <label>{{ translate('Full name')}}</label>
             </div>
             <div class="col-md-10">
-                <textarea class="form-control mb-3" placeholder="{{ translate('Your Address')}}" rows="2" name="address" required>{{ $address_data->address }}</textarea>
+                <input type="text" class="form-control mb-3" placeholder="{{ translate('Full Name') }}" name="name" required value="{{$address_data->Full_name}}">
             </div>
         </div>
         <div class="row">
@@ -36,15 +36,38 @@
                 </select>
             </div>
         </div>
-
         <div class="row">
+            <div class="col-md-2">
+                <label>{{ Lang::locale() == 'sa' ? translate('اسم الحي') : translate('Neighborhood name')}}</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" class="form-control mb-3" placeholder="{{ Lang::locale() == 'sa' ? translate('اسم الحي') : translate('Your Neighborhood name')}}" name="Neighborhood_name" value="{{ $address_data->neighbourhood_name }}" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>{{ Lang::locale() == 'sa' ? translate('اسم الشارع') : translate('Street name')}}</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" class="form-control mb-3" placeholder="{{ Lang::locale() == 'sa' ? translate('اسم الشارع') : translate('Street name')}}" name="street_name" value="{{ $address_data->street_name }}" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>{{ Lang::locale() == 'sa' ? translate('رقم الشقة (اختياري)') : translate('Apt No. (optional)')}}</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" class="form-control mb-3" placeholder="{{ Lang::locale() == 'sa' ? translate('رقم الشقة (اختياري)') : translate('Apt No. (optional)')}}" name="apt_no" value="">
+            </div>
+        </div>
+        {{-- <div class="row">
             <div class="col-md-2">
                 <label>{{ translate('Postal code')}}</label>
             </div>
             <div class="col-md-10">
                 <input type="text" class="form-control mb-3" placeholder="{{ translate('Your Postal Code')}}" value="{{ $address_data->postal_code }}" name="postal_code" value="" required>
             </div>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-md-2">
                 <label>{{ translate('Phone')}}</label>

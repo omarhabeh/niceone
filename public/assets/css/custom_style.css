@@ -1,0 +1,79 @@
+/* update */
+.profile .modal-content .modal-header{
+    border: none;
+    padding: 0px 20px;
+}
+.usermodal .modal-content{
+    width: 400px;
+    justify-content: center;
+    display: flex;
+    margin: auto;
+}
+.profile .modal-content section{
+    padding:0px !important;
+}
+.profile .toprow .la{
+    font-size: 50px;
+    border: 2px solid black;
+    border-radius: 46px;
+    padding:10px;
+}
+.profile .toprow{
+    text-align:center;
+}
+.profile .toprow {
+    font-size:1.3em !important;
+}
+.profile .text-muted {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile .toprow .text-muted:before{
+    content: "";
+    height: 1px;
+    background: rgba(0, 0, 0, 0.10);
+    flex: 1;
+    margin-left: 10px;
+    margin-top: 4px;
+}
+.profile .toprow .text-muted:after{
+    content: "";
+    height: 1px;
+    background: rgba(0, 0, 0, 0.10);
+    flex: 1;
+    margin-left: 10px;
+    margin-top: 4px;
+}
+.profile .bottomrow i{
+    font-size:25px;
+}
+.methods .card{
+    font-size: 20px;
+    text-align:center; 
+    cursor: pointer;
+    padding: 20px;
+    box-shadow:none !important;
+    border: 2px solid;
+    border-radius:15px;
+}
+.methods .card:hover{
+    background: black;
+    color: white;
+}
+.profile .card p {
+    margin-bottom:0px;
+}
+.bottomrow .col{
+    padding: 10px;
+    margin: 5px;
+}
+.methods p{
+    font-size:15px;
+}
+.methods {
+    padding: 0px 30px;
+}
+/* .bottomrow .row{
+    padding: 0px 30px;
+} */
