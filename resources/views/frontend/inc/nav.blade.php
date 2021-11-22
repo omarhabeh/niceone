@@ -22,7 +22,7 @@
                                 $locale = Session::get('locale', Config::get('app.locale'));
                             }
                             else{
-                                $locale = 'en';
+                                $locale = 'sa';
                             }
                         @endphp
                         <a href="javascript:void(0)" class="dropdown-toggle text-reset py-2" data-toggle="dropdown" data-display="static">

@@ -51,6 +51,10 @@ Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.ch
 
 Route::post('smslogin/', 'HomeController@smslogin' )->name('smslogin');
 Route::post('smsotp/', 'HomeController@smsotp' )->name('smsotp');
+
+Route::post('emaillogin/', 'HomeController@emaillogin' )->name('emaillogin');
+Route::post('emailotp/', 'HomeController@emailotp' )->name('emailotp');
+
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 Route::get('/users/login', 'HomeController@login')->name('user.login');
@@ -72,11 +76,9 @@ Route::post('/category/nav-element-list', 'HomeController@get_category_items')->
 Route::get('/flash-deals', 'HomeController@all_flash_deals')->name('flash-deals');
 Route::get('/flash-deal/{slug}', 'HomeController@flash_deal_details')->name('flash-deal-details');
 
-
 Route::get('/sitemap.xml', function() {
     return base_path('sitemap.xml');
 });
-
 
 Route::get('/customer-products', 'CustomerProductController@customer_products_listing')->name('customer.products');
 Route::get('/customer-products?category={category_slug}', 'CustomerProductController@search')->name('customer_products.category');

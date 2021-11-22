@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.titan.email'),
+    'host' => env('MAIL_HOST', 'smtp.hostinger.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'info@niceone.com.sa	'),
+        'address' => env('MAIL_FROM_ADDRESS', 'info@niceone.com.sa'),
         'name' => env('MAIL_FROM_NAME', 'niceone'),
     ],
 

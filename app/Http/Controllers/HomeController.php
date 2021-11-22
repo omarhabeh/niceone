@@ -88,7 +88,6 @@ class HomeController extends Controller
         }
         return back();
     }
-
     public function smslogin(Request $request){
         $otp = rand(1000, 9999);
         $request->validate([
@@ -129,7 +128,45 @@ class HomeController extends Controller
             }
         }
         return response()->json(['error'=>'OTP password doesn\'t match']);
-
+    }
+    public function emaillogin(Request $request){
+        $otp = rand(1000, 9999);
+        $request->validate([
+            'email' => ['required','email'],
+        ]);
+        if(!$user = User::where('email',$request->email)){
+            $user = new User;
+            $user->email = $request->email;
+            $user->verification_code = $otp;
+            $user->save();
+        }
+        else{
+            \DB::table('users')
+            ->where('email',$request->email)  // find your user by their email
+            ->limit(1)  // optional - to ensure only one record is updated.
+            ->update(array('verification_code' => $otp)); 
+        }
+        Session::put('user_email',$request->email);
+        $data = $otp.' رمز التحقق الخاص بك هو ';
+        Mail::raw($data, function ($message)  use($request) {
+        $message->to($request->email)
+            ->subject('رمز التحقق');
+        });
+        return response()->json($request);
+    }
+    public function emailotp(Request $request){
+        $request->validate([
+            'otp' => 'required',
+        ]);
+        $email = Session::get('user_email');
+        $otp_from_db = User::where('email',$email)->pluck('verification_code')->first();
+        if($otp_from_db === $request->otp){
+            $user = User::where('email',$email)->first();
+            if(Auth::loginUsingId($user->id)){
+                return response()->json(['message'=>'Login succeed']);
+            }
+        }
+        return response()->json(['error'=>'OTP password doesn\'t match']);
     }
     public function sendRequest($site, $data)
     {
@@ -273,6 +310,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        Session::put('locale', 'sa');
+        Session::put('code', 'sa');
         return view('frontend.index');
     }
 
