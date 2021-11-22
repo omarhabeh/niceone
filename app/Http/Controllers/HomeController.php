@@ -90,9 +90,9 @@ class HomeController extends Controller
     }
 
     public function smslogin(Request $request){
-        $otp = rand(100000, 999999);
+        $otp = rand(1000, 9999);
         $request->validate([
-            'phone' => ['required',`regex:#(\+\d+|0)(\d{10})$#`,'min:10'],
+            'phone' => ['required','min:9'],
         ]);
         if(!$user = User::where('phone',$request->phone)){
             $user = new User;
