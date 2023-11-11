@@ -66,7 +66,7 @@
                 @endphp
 
                 @if (!empty($admin_products))
-                <form class="form-default" action="{{ route('checkout.store_delivery_info') }}" role="form" method="POST">
+                <form class="form-default" action="{{ route('payment.checkout') }}" role="form" method="POST">
                     @csrf
                     <div class="card mb-3 shadow-sm border-0 rounded">
                         <div class="card-header p-3">

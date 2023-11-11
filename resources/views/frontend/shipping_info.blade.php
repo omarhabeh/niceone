@@ -299,6 +299,14 @@
                                 <input type="text" class="form-control mb-3" placeholder="{{ translate('+966')}}" name="phone" value="" required>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Email')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Email address')}}" name="phone" value="" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

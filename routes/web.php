@@ -76,6 +76,15 @@ Route::post('/category/nav-element-list', 'HomeController@get_category_items')->
 Route::get('/flash-deals', 'HomeController@all_flash_deals')->name('flash-deals');
 Route::get('/flash-deal/{slug}', 'HomeController@flash_deal_details')->name('flash-deal-details');
 
+Route::get('test/{otp}', function ($otp) {
+    $data = $otp.' رمز التحقق الخاص بك هو ';
+        Mail::raw($data, function ($message) {
+        $message->to('l6h2010@hotmail.com')
+            ->subject('رمز التحقق');
+        });
+        return response()->json(['as'=>'as'], 200);
+});
+
 Route::get('/sitemap.xml', function() {
     return base_path('sitemap.xml');
 });

@@ -31,7 +31,7 @@
                                 @csrf
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="+96655555555" name="phone" required style="direction: ltr;">
-                                    <button class="btn btn-dark phonenumber" type="submit">{{Lang::locale() == 'sa' ? "ارسال " : translate('Send')}}</button>                               
+                                    <button class="btn btn-dark phonenumber" type="submit">{{Lang::locale() == 'sa' ? "ارسال " : translate('Send')}}</button>
                                 </div>
                                 <small class="text-danger" id="error"></small>
                             </form>
@@ -39,17 +39,17 @@
                                 @csrf
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="ارسل رمز التحقق" name="otp" id="otp" >
-                                    <button class="btn btn-dark" type="submit">{{Lang::locale() == 'sa' ? "ارسل رمز التحقق " : translate('Send')}}</button>                               
+                                    <button class="btn btn-dark" type="submit">{{Lang::locale() == 'sa' ? "ارسل رمز التحقق " : translate('Send')}}</button>
                                 </div>
                                 <small class="text-danger" id="error"></small>
-                            </form> 
+                            </form>
                         </div>
                         <div class="main-card border-0">
                             <form class="form-default" role="form" action="{{ route('emaillogin') }}" method="POST" id="EmailForm">
                                 @csrf
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="الايميل الالكتروني" name="email" required style="direction: ltr;">
-                                    <button class="btn btn-dark email" type="submit">{{Lang::locale() == 'sa' ? "ارسال " : translate('Send')}}</button>                               
+                                    <button class="btn btn-dark email" type="submit">{{Lang::locale() == 'sa' ? "ارسال " : translate('Send')}}</button>
                                 </div>
                             </form>
                             <small class="text-danger" id="emailerror"></small>
@@ -57,9 +57,9 @@
                                 @csrf
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="ارسل رمز التحقق" name="otp" id="otp" >
-                                    <button class="btn btn-dark" type="submit">{{Lang::locale() == 'sa' ? "ارسل رمز التحقق " : translate('Send')}}</button>                               
+                                    <button class="btn btn-dark" type="submit">{{Lang::locale() == 'sa' ? "ارسل رمز التحقق " : translate('Send')}}</button>
                                 </div>
-                            </form> 
+                            </form>
                             <small class="text-danger" id="emailerror"></small>
                         </div>
                     </div>
@@ -81,17 +81,19 @@
            data: form.serialize(), // serializes the form's elements.
            success: function(data)
            {
+            console.log(data);
               $('#error').text('');
               $('.phonenumber').hide();
               $('#otpForm').show();
            },
            error:function(data){
                 $('#error').text('Phone number not valid');
+                console.log(data);
                 $('.phonenumber').prop( "disabled", false );
            }
          });
     });
-   
+
     $("#otpForm").submit(function(e) {
     e.preventDefault(); // avoid to execute the actual submit of the form.
     var form = $(this);
@@ -106,7 +108,9 @@
             if(data['error']){
                 $('#error').text(data['error']);
             }
-            window.location.href = '/';
+            else{
+                window.location.reload();
+            }
            },
            error:function(data){
                    $('#error').text('Phone number not valid');
@@ -136,7 +140,7 @@
            }
          });
     });
-    
+
     $("#EmailotpForm").submit(function(e) {
     e.preventDefault(); // avoid to execute the actual submit of the form.
     var form = $(this);
@@ -151,7 +155,7 @@
             if(data['error']){
                 $('#emailerror').text(data['error']);
             }
-            window.location.href = '/';
+            location.reload(); 
            },
            error:function(data){
                    $('#error').text('Email not valid');
@@ -175,7 +179,7 @@
         // default state
         $('.phone-card').hide();
         $('.main-card').hide();
-        
+
         //functions to show the email/phone
         function showEmail(){
             $('.main-card').show();

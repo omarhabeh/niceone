@@ -38,31 +38,20 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         if ($request->payment_option != null) {
-
             if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
                     \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
                     !Auth::user()->email) {
-
                 flash(translate('Your email should be verified before order'))->warning();
                 return redirect()->route('cart')->send();
             }
-
             if(get_setting('email_verification') == 1 && !Auth::user()->hasVerifiedEmail()) {
-
                 flash(translate('Your email should be verified before order'))->warning();
                 return redirect()->route('cart')->send();
             }
-
             $orderController = new OrderController;
-
             $orderController->store($request);
-
-
-
             $request->session()->put('payment_type', 'cart_payment');
-
             if ($request->session()->get('order_id') != null) {
-
                 if ($request->payment_option == 'paypal') {
                     $paypal = new PaypalController;
                     return $paypal->getCheckout();
@@ -70,8 +59,6 @@ class CheckoutController extends Controller
                     $Moyasar = new   MoyasarController();
                     return $Moyasar->pay($request);
                 }
-
-
                 elseif ($request->payment_option == 'stripe') {
                     $stripe = new StripePaymentController;
                     return $stripe->stripe();
@@ -288,7 +275,56 @@ class CheckoutController extends Controller
             $cartItem->address_id = $request->address_id;
             $cartItem->save();
         }
-        return view('frontend.delivery_info', compact('carts'));
+        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
+        $total = 0;
+        $tax = 0;
+        $shipping = 0;
+        $subtotal = 0;
+
+        if ($carts && count($carts) > 0) {
+            foreach ($carts as $key => $cartItem) {
+                $product = \App\Product::find($cartItem['product_id']);
+                $tax += $cartItem['tax'] * $cartItem['quantity'];
+                $subtotal += $cartItem['price'] * $cartItem['quantity'];
+                $cartItem['shipping_type'] = 'home_delivery';
+                $cartItem['shipping_cost'] = 0;
+                if ($cartItem['shipping_type'] == 'home_delivery') {
+                    $cartItem['shipping_cost'] = getShippingCost($carts, $key);
+                }
+                if(isset($cartItem['shipping_cost']) && is_array(json_decode($cartItem['shipping_cost'], true))) {
+                    foreach(json_decode($cartItem['shipping_cost'], true) as $shipping_region => $val) {
+                        if($shipping_info['city'] == $shipping_region) {
+                            $cartItem['shipping_cost'] = (double)($val);
+                            break;
+                        } else {
+                            $cartItem['shipping_cost'] = 0;
+                        }
+                    }
+                } else {
+                    if (!$cartItem['shipping_cost'] ||
+                            $cartItem['shipping_cost'] == null ||
+                            $cartItem['shipping_cost'] == 'null') {
+
+                        $cartItem['shipping_cost'] = 0;
+                    }
+                }
+
+                if($product->is_quantity_multiplied == 1 && get_setting('shipping_type') == 'product_wise_shipping') {
+                    $cartItem['shipping_cost'] =  $cartItem['shipping_cost'] * $cartItem['quantity'];
+                }
+
+                $shipping += $cartItem['shipping_cost'];
+                $cartItem->save();
+
+            }
+            $total = $subtotal + $tax + $shipping;
+            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total'));
+
+        } else {
+            flash(translate('Your Cart was empty'))->warning();
+            return redirect()->route('home');
+        }
+        // return view('frontend.delivery_info', compact('carts'));
     }
 
     public function store_delivery_info(Request $request)
@@ -307,12 +343,7 @@ class CheckoutController extends Controller
                 $product = \App\Product::find($cartItem['product_id']);
                 $tax += $cartItem['tax'] * $cartItem['quantity'];
                 $subtotal += $cartItem['price'] * $cartItem['quantity'];
-                // if ($request['shipping_type_' . $request->owner_id] == 'pickup_point') {
-                //     $cartItem['shipping_type'] = 'pickup_point';
-                //     $cartItem['pickup_point'] = $request['pickup_point_id_' . $request->owner_id];
-                // } else {
                 $cartItem['shipping_type'] = 'home_delivery';
-                // }
                 $cartItem['shipping_cost'] = 0;
                 if ($cartItem['shipping_type'] == 'home_delivery') {
                     $cartItem['shipping_cost'] = getShippingCost($carts, $key);

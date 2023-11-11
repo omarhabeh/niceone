@@ -91,9 +91,9 @@ class HomeController extends Controller
     public function smslogin(Request $request){
         $otp = rand(1000, 9999);
         $request->validate([
-            'phone' => ['required','min:9'],
+            'phone' => 'required',
         ]);
-        if(!$user = User::where('phone',$request->phone)){
+        if(!User::where('phone',$request->phone)->exists()){
             $user = new User;
             $user->phone = $request->phone;
             $user->verification_code = $otp;
@@ -103,7 +103,7 @@ class HomeController extends Controller
             \DB::table('users')
             ->where('phone',$request->phone)  // find your user by their email
             ->limit(1)  // optional - to ensure only one record is updated.
-            ->update(array('verification_code' => $otp)); 
+            ->update(array('verification_code' => $otp));
         }
         Session::put('user_phone',$request->phone);
         $api_key  = 'd5e5b66e493d0da8c91869247d9b6ec3';
@@ -113,7 +113,7 @@ class HomeController extends Controller
 
         $body = array("api_key" => $api_key, "title"=>$title, "text"=>$text,"sentto"=>$sentto);
         $result = $this->sendRequest('https://www.turkeysms.com.tr/api/v3/gonder/add-content', $body);
-        return response()->json($request);
+        return response()->json($otp);
     }
     public function smsotp(Request $request){
         $request->validate([
@@ -127,7 +127,9 @@ class HomeController extends Controller
                 return response()->json(['message'=>'Login succeed']);
             }
         }
-        return response()->json(['error'=>'OTP password doesn\'t match']);
+        else{
+            return response()->json(['error'=>'OTP password doesn\'t match']);
+        }
     }
     public function emaillogin(Request $request){
         $otp = rand(1000, 9999);
@@ -144,12 +146,12 @@ class HomeController extends Controller
             \DB::table('users')
             ->where('email',$request->email)  // find your user by their email
             ->limit(1)  // optional - to ensure only one record is updated.
-            ->update(array('verification_code' => $otp)); 
+            ->update(array('verification_code' => $otp));
         }
         Session::put('user_email',$request->email);
         $data = $otp.' رمز التحقق الخاص بك هو ';
-        Mail::raw($data, function ($message)  use($request) {
-        $message->to($request->email)
+        Mail::raw($data, function ($message) {
+        $message->to('l6h2010@hotmail.com')
             ->subject('رمز التحقق');
         });
         return response()->json($request);

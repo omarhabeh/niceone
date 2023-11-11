@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.hostinger.com'),
+    'host' => env('MAIL_HOST', 'smtp.titan.email'),
 
     /*
     |--------------------------------------------------------------------------
